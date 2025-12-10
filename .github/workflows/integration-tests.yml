@@ -17,38 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  integration-tests:
-    name: Integration Test - ES ${{ matrix.elastic-stack-version }} ${{ matrix.snapshot && '(Snapshot)' || '' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        elastic-stack-version:
-          - "7.current"
-          - "8.previous"
-          - "8.current"
-          - "9.current"
-        snapshot: [false, true]
-        include:
-          - elastic-stack-version: "main"
-            snapshot: true
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Setup test environment
-        id: setup
-        uses: logstash-plugins/.ci/setup@feature/github-actions
-        with:
-          elastic-stack-version: ${{ matrix.elastic-stack-version }}
-          snapshot: ${{ matrix.snapshot }}
-          integration: true
-
-      - name: Run integration tests
-        if: steps.setup.outputs.skip != 'true'
-        run: |
-          bash .ci/docker-run.sh
-
-      # NOTE: no cleanup needed when running on ephemeral runners
+  tests:
+    uses: logstash-plugins/.ci/.github/workflows/test-matrix.yml@feature/github-actions
+    permissions:
+      contents: read

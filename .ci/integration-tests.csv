@@ -1,0 +1,10 @@
+#version,snapshot
+7.current,false
+7.current,true
+8.previous,false
+8.previous,true
+8.current,false
+8.current,true
+9.current,false
+9.current,true
+main,true
